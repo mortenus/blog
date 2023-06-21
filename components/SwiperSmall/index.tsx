@@ -58,7 +58,7 @@ const SwiperSmall: React.FC<SwiperProps> = ({ items, style }) => {
   return (
     <>
       <div className={styles.large} style={style}>
-        <h3 className={styles.title}>More from Trimsy</h3>
+        <h3 className={styles.title}>Featured Blogs</h3>
         <div className={styles.swiper} ref={ref}>
           <div
             className={styles['swiper-wrapper']}

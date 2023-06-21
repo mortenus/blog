@@ -5,13 +5,25 @@ import styles from './NextToRead.module.scss';
 
 type TNextToRead = {
   arr: {
-    date: string;
-    title: string;
-    description: string;
-    imgUrl: string;
+    data: {
+      date: string;
+      title: string;
+      description: string;
+      imgUrl: string;
+      hashtags?: string[];
+    };
     slug: string;
   }[];
 };
+// type TNextToRead = {
+//   arr: {
+//     date: string;
+//     title: string;
+//     description: string;
+//     imgUrl: string;
+//     slug: string;
+//   }[];
+// };
 
 const NextToRead = ({ arr }: TNextToRead) => {
   return (

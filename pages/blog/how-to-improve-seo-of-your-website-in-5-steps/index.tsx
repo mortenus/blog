@@ -5,6 +5,7 @@ import Link from 'next/link';
 import BlogWrapper from 'features/Blog/BlogWrapper';
 
 import styles from '../Post.module.scss';
+import { axios } from 'core';
 
 const info = {
   title: 'How To Improve SEO of your Website in 5 Steps',
@@ -57,9 +58,30 @@ const nextToReadArr = [
 Post.title = info.title;
 Post.description = info.description;
 
-export default function Post() {
+type TBlog = {
+  data: {
+    date: string;
+    title: string;
+    description: string;
+    imgUrl: string;
+    hashtag: string[];
+    fullText: string;
+    related: any[];
+    summary: string;
+  };
+  slug: string;
+};
+
+type TPost = {
+  currentBlog: TBlog;
+};
+
+export default function Post({ currentBlog }: TPost) {
   return (
-    <BlogWrapper info={info} nextToReadArr={nextToReadArr}>
+    <BlogWrapper
+      info={info}
+      summary={currentBlog.data.summary}
+      nextToReadArr={currentBlog.data.related}>
       <section className={styles.section}>
         <p>
           One of the ways to publish and distribute your website is to use Search Engine
@@ -550,4 +572,24 @@ content="Lorem ipsum dolor sit amet, consectetur adipsing elit. Aliquam ac purus
       </section>
     </BlogWrapper>
   );
+}
+
+export async function getStaticProps() {
+  const currentBlog = await axios
+    .get(`http://localhost:3001/blog?path=${info.slug}`)
+    .then((data) => {
+      console.log(data.data);
+      return data.data;
+    })
+    .catch((err) => {
+      console.log(err);
+
+      return [];
+    });
+
+  // const nextToReadArr = compareBlogPosts(fullText, blogs)
+
+  return {
+    props: { currentBlog },
+  };
 }

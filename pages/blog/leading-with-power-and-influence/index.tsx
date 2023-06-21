@@ -54,7 +54,7 @@ Post.description = info.description;
 
 export default function Post() {
   return (
-    <BlogWrapper info={info} nextToReadArr={nextToReadArr}>
+    <BlogWrapper info={info} nextToReadArr={[]}>
       <section className={styles.section}>
         <p>
           Leading with power and influence involves using your position and personal qualities to

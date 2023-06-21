@@ -17,6 +17,9 @@ type TBlogItemBase = {
   customRef?: any;
   type?: string;
   animation?: string | boolean;
+  isFavorited?: boolean | null;
+  handleFavoriteSend?: Function;
+  modal?: string;
 };
 
 interface TBlogItemOnClick extends TBlogItemBase {
@@ -43,10 +46,30 @@ const BlogItem = ({
   customRef,
   type,
   animation = true,
+  isFavorited,
+  handleFavoriteSend,
+  modal,
 }: TBlogItem) => {
   //   const ref = React.useRef(null);
   const ref = customRef || React.useRef(null);
   const isVisible = useIsVisible({ ref, once: true });
+
+  const [favorited, setFavorited] = React.useState<boolean | null>(null);
+
+  React.useEffect(() => {
+    if (isFavorited === undefined || isFavorited === null) return setFavorited(null);
+
+    setFavorited(isFavorited);
+  }, [isFavorited]);
+
+  const handleFavoriteChange = async (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // console.log('clicked');
+    if (!handleFavoriteSend) return;
+    const isSuccess = await handleFavoriteSend(slug);
+    isSuccess && setFavorited(!favorited);
+  };
 
   return slug ? (
     <div
@@ -68,7 +91,38 @@ const BlogItem = ({
         <BlogImage url={imgUrl} />
       </div>
       <div className={styles.text}>
-        <span>{date}</span>
+        <div className={styles.subhead}>
+          <span>{date}</span>
+          {favorited !== null && (
+            <div onClick={handleFavoriteChange} style={{ zIndex: '20' }}>
+              {favorited ? (
+                <svg
+                  width="18"
+                  height="23"
+                  viewBox="0 0 18 23"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M0 23V2.55556C0 1.85278 0.252 1.25095 0.756 0.750057C1.26 0.249169 1.86514 -0.000849682 2.57143 2.1694e-06H15.4286C16.1357 2.1694e-06 16.7413 0.250447 17.2453 0.751335C17.7493 1.25222 18.0009 1.85363 18 2.55556V23L9 19.1667L0 23Z"
+                    fill="black"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  width="18"
+                  height="23"
+                  viewBox="0 0 18 23"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M0 23V2.55556C0 1.85278 0.252 1.25095 0.756 0.750057C1.26 0.249169 1.86514 -0.000849682 2.57143 2.1694e-06H15.4286C16.1357 2.1694e-06 16.7413 0.250447 17.2453 0.751335C17.7493 1.25222 18.0009 1.85363 18 2.55556V23L9 19.1667L0 23ZM2.57143 19.1028L9 16.3556L15.4286 19.1028V2.55556H2.57143V19.1028Z"
+                    fill="black"
+                  />
+                </svg>
+              )}
+            </div>
+          )}
+        </div>
         <h3>{title}</h3>
         {description && <p>{description}</p>}
       </div>
@@ -112,10 +166,41 @@ const BlogItem = ({
         )}
         <h3>{title}</h3>
         <p>{description}</p>
-        <span>{date}</span>
+        <div className={styles.subhead}>
+          <span>{date}</span>
+          {favorited !== null && modal && (
+            <div onClick={handleFavoriteChange} style={{ zIndex: '20' }}>
+              {favorited ? (
+                <svg
+                  width="18"
+                  height="23"
+                  viewBox="0 0 18 23"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M0 23V2.55556C0 1.85278 0.252 1.25095 0.756 0.750057C1.26 0.249169 1.86514 -0.000849682 2.57143 2.1694e-06H15.4286C16.1357 2.1694e-06 16.7413 0.250447 17.2453 0.751335C17.7493 1.25222 18.0009 1.85363 18 2.55556V23L9 19.1667L0 23Z"
+                    fill="black"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  width="18"
+                  height="23"
+                  viewBox="0 0 18 23"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M0 23V2.55556C0 1.85278 0.252 1.25095 0.756 0.750057C1.26 0.249169 1.86514 -0.000849682 2.57143 2.1694e-06H15.4286C16.1357 2.1694e-06 16.7413 0.250447 17.2453 0.751335C17.7493 1.25222 18.0009 1.85363 18 2.55556V23L9 19.1667L0 23ZM2.57143 19.1028L9 16.3556L15.4286 19.1028V2.55556H2.57143V19.1028Z"
+                    fill="black"
+                  />
+                </svg>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default BlogItem;
+export default React.memo(BlogItem);

@@ -5,6 +5,7 @@ import styles from './blog.module.scss';
 import { BlogItem } from 'features/Blog';
 import Modal from 'features/Modal';
 import useHideOnOutsideClick from 'hooks/useHideOnOutsideClick';
+import { axios } from 'core';
 
 // import { useFetchBlogs } from 'features/Blog/hooks';
 // import useAnimateBackgroundPosition from 'hooks/useAnimateEaseInOut';
@@ -96,6 +97,55 @@ export default function Blog({ items }: any) {
     ref,
     toNotCloseRef,
   );
+
+  const [favorites, setFavorites] = React.useState<undefined | string[]>(undefined);
+
+  const getUserDataFromLocalStorage = () => {
+    if (typeof window !== 'undefined') {
+      const user = localStorage.getItem('user');
+
+      if (user) {
+        const parsedUser = JSON.parse(user);
+
+        const favoriteBlogs = parsedUser.favoriteBlogs;
+        if (!favoriteBlogs) return;
+        setFavorites(favoriteBlogs);
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    getUserDataFromLocalStorage();
+  }, []);
+
+  const handleFavoriteSend = async (slug: string) => {
+    return axios
+      .post('http://localhost:3001/user/blog/favorites', { slug })
+      .then(async () => {
+        return axios
+          .get('http://localhost:3001/user/me')
+          .then(({ data }) => {
+            localStorage.setItem('user', JSON.stringify(data));
+            localStorage.setItem('isAuth', String(true));
+
+            getUserDataFromLocalStorage();
+            //   window.localStorage['data'] = data;
+            //   window.localStorage['isAuth'] = true;
+
+            return true;
+          })
+          .catch((err) => {
+            if (err.response && err.response.status === 403) {
+              delete window.localStorage.token;
+              delete window.localStorage.data;
+            }
+          });
+      })
+      .catch((err) => {
+        console.log('There has been an error while updating the favorites blogs', err);
+        return false;
+      });
+  };
 
   return (
     <>
@@ -191,6 +241,12 @@ export default function Blog({ items }: any) {
                         customRef={!item.slug && toNotCloseRef}
                         featured={i === 0}
                         type={item.type && item.type}
+                        isFavorited={
+                          favorites
+                            ? favorites.some((favoritedSlug) => favoritedSlug === item.slug)
+                            : null
+                        }
+                        handleFavoriteSend={handleFavoriteSend}
                         {...item.data}
                       />
                     );
@@ -203,6 +259,14 @@ export default function Blog({ items }: any) {
                             key={items[i + 1].slug}
                             itemCount={layout!.classes[i + 1]}
                             slug={items[i + 1].slug}
+                            isFavorited={
+                              favorites
+                                ? favorites.some(
+                                    (favoritedSlug) => favoritedSlug === items[i + 1].slug,
+                                  )
+                                : null
+                            }
+                            handleFavoriteSend={handleFavoriteSend}
                             {...items[i + 1].data}
                           />
                         </div>,
@@ -324,7 +388,7 @@ export async function getStaticProps() {
         title: 'Maximizing Website Performance with CDN: Benefits and Advantages',
         description:
           'A content delivery network (CDN) is a widely recognized solution that helps to improve website performance. By distributing website content across multiple servers around the globe, a CDN enhances website speed, security, and reliability.',
-        imgUrl: 'https://trimsy.org/uploads/1556542894636.png',
+        imgUrl: 'https://trimsy.org/uploads/1556542894636_original.png',
       },
       slug: '/blog/maximizing-website-performance-with-cdn',
     },

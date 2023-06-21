@@ -5,14 +5,17 @@ import React from 'react';
 import styles from './Item.module.scss';
 
 type TItem = {
-  date: string;
-  title: string;
-  description: string;
-  imgUrl: string;
+  data: {
+    date: string;
+    title: string;
+    description: string;
+    imgUrl: string;
+    hashtags?: string[];
+  };
   slug: string;
 };
 
-const Item = ({ date, title, description, imgUrl, slug }: TItem) => {
+const Item = ({ data, slug }: TItem) => {
   return (
     <div className={styles.item}>
       <Link href={slug} tabIndex={0}>
@@ -23,15 +26,15 @@ const Item = ({ date, title, description, imgUrl, slug }: TItem) => {
               height="0"
               sizes="100vw"
               style={{ width: '100%' }}
-              src={imgUrl}
+              src={data.imgUrl}
               alt={'Next To Read Blog Image'}
               loading={'lazy'}
             />
           </div>
           <div className={styles.content}>
-            <span className={styles.nextDate}>{date}</span>
-            <h4>{title}</h4>
-            <p>{description}</p>
+            <span className={styles.nextDate}>{data.date}</span>
+            <h4>{data.title}</h4>
+            <p>{data.description}</p>
           </div>
         </div>
       </Link>

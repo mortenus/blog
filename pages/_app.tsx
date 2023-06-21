@@ -15,6 +15,7 @@ import Script from 'features/Script';
 import { useRouter } from 'next/router';
 import useChangeStateOnSpace from 'hooks/useChangeStateOnSpace';
 import { LocalNav } from 'components';
+import useToken from 'hooks/useToken';
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { title: string; description?: string };
@@ -34,6 +35,8 @@ export default function App({ Component, pageProps }: CustomAppProps) {
   useGtag();
 
   const router = useRouter();
+
+  useToken();
 
   return (
     <>

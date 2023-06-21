@@ -26,26 +26,17 @@ About.title = 'About us';
 export default function About({ items }: any) {
   return (
     <>
-      <h1 className={'hidden'}>About Us | Trimsy</h1>
+      {/* <h1 className={'hidden'}>About Us | Trimsy</h1> */}
       <section className={styles.introWrap}>
         <div className="global-wrapper ">
           <div className={styles.intro}>
-            <h2>About us</h2>
+            <h2>About the Project</h2>
           </div>
           <div className={styles.platform}>
             <div className={styles.platform_text}>
-              <h4>
-                Trimsy is a platform for people to bring their professional ideas into reality.
-              </h4>
-              <h4>
-                We understand that every business is unique, which is why we work closely with our
-                clients to discover their specific goals and vision for their web presence or get
-                help from experts on careers.
-              </h4>
-              <h4>
-                Whether you're looking to build a new website from scratch, optimize an existing
-                site for better performance, or establish new careers opportunities, we can help.
-              </h4>
+              <h4>Hi!</h4>
+              <h4>Trismy Blog was created for the purpose of teaching everything about Web.</h4>
+              <h4>Wheather you're looking for answers or have interest in the topic, welcome!</h4>
             </div>
           </div>
 
@@ -95,7 +86,7 @@ export default function About({ items }: any) {
           <CommunityItem />
         </div>
       </section>
-      <SwiperSmall items={items} />
+      {/* <SwiperSmall items={items} /> */}
       <Head>
         <meta content={'https://trimsy.org/images/mini-logo.png'} property="og:image" />
         <meta property="og:type" content="website" />

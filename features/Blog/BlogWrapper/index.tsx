@@ -14,7 +14,7 @@ import Link from 'next/link';
 import useInView from 'hooks/useInView';
 import { useOnScroll } from 'hooks/useOnScroll';
 
-const BlogWrapper = ({ children, info, nextToReadArr }: TBlogWrapper) => {
+const BlogWrapper = ({ children, info, nextToReadArr, summary }: TBlogWrapper) => {
   const ArticleSchema = {
     '@context': 'https://schema.org',
     '@id': `https://trimsy.org${info.slug}#article`,
@@ -172,6 +172,13 @@ const BlogWrapper = ({ children, info, nextToReadArr }: TBlogWrapper) => {
               alt={'Header Blog Image'}
             />
           </div>
+
+          {summary && (
+            <>
+              <h3 style={{ paddingTop: '50px', textAlign: 'center' }}>Summary</h3>
+              <p>{summary}</p>
+            </>
+          )}
 
           <div className={styles.date}>
             <span>{info.date}</span>

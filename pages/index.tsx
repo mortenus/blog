@@ -20,11 +20,10 @@ export default function Landing({
     <>
       <main>
         <h1 style={{ display: 'none', visibility: 'hidden' }}>Trimsy</h1>
-        <Web />
+        {/* <Web />
 
-        <Careers />
-
-        <SwiperSmall items={items} style={{ marginTop: '30px' }} />
+        <Careers /> */}
+        <SwiperSmall items={items} />
       </main>
 
       <Head>

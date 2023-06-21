@@ -20,12 +20,21 @@ type TBlogWrapper = {
     author: TAuthor;
   };
   nextToReadArr: {
-    date: string;
-    title: string;
-    description: string;
-    imgUrl: string;
+    data: {
+      date: string;
+      title: string;
+      description: string;
+      imgUrl: string;
+      hashtags?: string[];
+    };
     slug: string;
+    // date: string;
+    // title: string;
+    // description: string;
+    // imgUrl: string;
+    // slug: string;
   }[];
+  summary?: string;
 };
 
 export default TBlogWrapper;
